@@ -1,0 +1,5 @@
+
+define "On" true,
+define "Off" false,
+
+"local_use": ["inner_state", On]

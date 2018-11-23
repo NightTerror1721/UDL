@@ -1,0 +1,17 @@
+"abs": {
+    0: "default",
+    1: "locable"
+},
+"seto": ["ola", "k", "ase", 450.0],
+"lol": [{}, {
+    "init self": false,
+    {
+        "lole": 40
+    }: ["test"],
+    "power": 35
+}, "nanai"],
+"nanai": "seto",
+"emp": [],
+"power": 50,
+"local_use": ["inner_state", true],
+"dash": false

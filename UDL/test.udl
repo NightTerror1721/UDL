@@ -1,0 +1,41 @@
+
+import "imp.udl",
+
+define types {},
+
+power: 50,
+dash: false,
+
+set "seto" "seto",
+
+$seto: ["ola", "k", "ase", 450.0],
+
+abs: {
+	0: "default",
+	1: "locable"
+},
+
+emp: [],
+
+lol: [
+	{},
+	{
+		"init self": false,
+		power: 35,
+		{ "lole": 40 }: ["test"]
+	},
+	"nanai"
+],
+
+nanai: $seto,
+
+echo seto,
+echo types,
+
+echo On Off,
+
+echo $__self,
+
+set "obj_test" {},
+template "imp.udl" $obj_test,
+echo $obj_test
