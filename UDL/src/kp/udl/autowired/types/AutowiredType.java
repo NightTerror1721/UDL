@@ -33,6 +33,7 @@ public abstract class AutowiredType
     public AutowiredType getKeyType() { throw new IllegalStateException(); }
     
     public boolean isBase() { return false; }
+    public boolean isEnum() { return false; }
     public boolean isArray() { return false; }
     public boolean isList() { return false; }
     public boolean isMap() { return false; }
@@ -51,7 +52,11 @@ public abstract class AutowiredType
         if(jtype instanceof Class<?>)
         {
             Class<?> jclass = (Class<?>) jtype;
-            if(jclass.isArray())
+            if(jclass.isEnum())
+            {
+                return new AutowiredEnumType(jclass);
+            }
+            else if(jclass.isArray())
             {
                 Class<?> base = jclass.getComponentType();
                 return new AutowiredArrayType(decode(base));
