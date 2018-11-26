@@ -35,23 +35,22 @@ public final class AutowiredCache
             return props;
         Class<?> superClazz = clazz.getSuperclass();
         if(superClazz != null)
-            props = loadProperties(superClazz, props);
-        if(CACHE.containsKey(clazz))
         {
-            AutowiredCache ac = CACHE.get(clazz);
-            props.addAll(ac.props);
-        }
-        else
-        {
-            for(Field field : clazz.getDeclaredFields())
+            if(CACHE.containsKey(superClazz))
             {
-                int mod = field.getModifiers();
-                if(Modifier.isStatic(mod) || Modifier.isFinal(mod) || !field.isAnnotationPresent(Property.class))
-                    continue;
-                Property prop = field.getAnnotation(Property.class);
-                PropertyCache cache = new PropertyCache(field, prop);
-                props.add(cache);
+                AutowiredCache ac = CACHE.get(superClazz);
+                props.addAll(ac.props);
             }
+            else props = loadProperties(superClazz, props);
+        }
+        for(Field field : clazz.getDeclaredFields())
+        {
+            int mod = field.getModifiers();
+            if(Modifier.isStatic(mod) || Modifier.isFinal(mod) || !field.isAnnotationPresent(Property.class))
+                continue;
+            Property prop = field.getAnnotation(Property.class);
+            PropertyCache cache = new PropertyCache(field, prop);
+            props.add(cache);
         }
         return props;
     }
