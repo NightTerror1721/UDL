@@ -500,7 +500,10 @@ public class UDLReader
             }
             char end = seek(true, PROPERTY_SEPARATOR, endChar);
             if(end == endChar)
+            {
+                read();
                 return new NormalValue(self_object);
+            }
         }
     }
     
