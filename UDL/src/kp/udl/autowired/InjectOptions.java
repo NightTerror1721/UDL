@@ -14,11 +14,11 @@ import java.lang.annotation.Target;
  *
  * @author Asus
  */
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Property
+public @interface InjectOptions
 {
-    String name() default "";
-    String set() default "";
-    String get() default "";
+    String builder() default "";
+    String beforeBuild() default "";
+    String afterBuild() default "";
 }

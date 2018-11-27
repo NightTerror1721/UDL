@@ -3,41 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/SerializerManager.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/exception/UDLException.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/data/UDLIdentifier.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/TestAuto.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/data/UDLString.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/types/AutowiredPojoType.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/Property.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/types/AutowiredBaseType.java</file>
             <file>file:/D:/UDL/UDL/src/kp/udl/input/UDLReader.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/AutowiredCache.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/cmd/DefineConstantCommand.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/output/UDLWriter.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/UDLManager.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/Autowired.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/types/AutowiredListType.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/Element.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/types/AutowiredArrayType.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/AutowiredSerializer.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/cmd/TemplateCommand.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/data/UDLElementType.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/cmd/ImportCommand.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/data/UDLArray.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/data/UDLObject.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/Command.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/ElementPool.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/cmd/ArrayCommands.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/cmd/SetVarCommand.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/types/AutowiredMapType.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/input/cmd/EchoCommand.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/UDL.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/data/UDLCommand.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/data/UDLVariableValue.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/Main.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/autowired/types/AutowiredType.java</file>
-            <file>file:/D:/UDL/UDL/src/kp/udl/data/UDLValue.java</file>
         </group>
     </open-files>
 </project-private>

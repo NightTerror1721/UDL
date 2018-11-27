@@ -5,6 +5,7 @@
  */
 package kp.udl.autowired;
 
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import kp.udl.autowired.AutowiredCache.PropertyCache;
 import kp.udl.data.UDLValue;
@@ -25,7 +26,7 @@ public final class Autowired
         try
         {
             AutowiredCache cache = AutowiredCache.getCache(jclass);
-            T obj = jclass.newInstance();
+            T obj = buildInjectedObject(cache, jclass);
             
             for(PropertyCache prop : cache.getProperties())
             {
@@ -33,8 +34,14 @@ public final class Autowired
                 if(value == null || value == UDLValue.NULL)
                     continue;
                 Object injectedObject = prop.type.inject(value);
-                prop.field.set(obj, injectedObject);
+                if(prop.set != null)
+                    prop.set.invoke(obj, injectedObject);
+                else prop.field.set(obj, injectedObject);
             }
+            
+            Method after = cache.getAfterBuild();
+            if(after != null)
+                after.invoke(obj);
             
             return obj;
         }
@@ -53,7 +60,7 @@ public final class Autowired
             
             for(PropertyCache prop : cache.getProperties())
             {
-                Object fieldValue = prop.field.get(source);
+                Object fieldValue = prop.get != null ? prop.get.invoke(source) : prop.field.get(source);
                 UDLValue key = valueOf(prop.name);
                 UDLValue value = fieldValue == null ? NULL : prop.type.extract(fieldValue);
                 obj.put(key, value);
@@ -65,5 +72,22 @@ public final class Autowired
         {
             throw new UDLException("Autowired exception has been ocurred:", ex);
         }
+    }
+    
+    
+    private static <T> T buildInjectedObject(AutowiredCache cache, Class<T> jclass) throws Throwable
+    {
+        T obj;
+        
+        Method builder = cache.getBuilder();
+        if(builder != null)
+            obj = (T) builder.invoke(null);
+        else obj = jclass.newInstance();
+        
+        Method before = cache.getBeforeBuild();
+        if(before != null)
+            before.invoke(obj);
+        
+        return obj;
     }
 }

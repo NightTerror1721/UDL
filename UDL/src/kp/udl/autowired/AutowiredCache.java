@@ -6,6 +6,7 @@
 package kp.udl.autowired;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,11 +23,27 @@ public final class AutowiredCache
 {
     private final Class<?> clazz;
     private final List<PropertyCache> props;
+    private final Method builder;
+    private final Method beforeBuild;
+    private final Method afterBuild;
     
     private AutowiredCache(Class<?> clazz)
     {
         this.clazz = clazz;
         props = Collections.unmodifiableList(loadProperties(clazz, new LinkedList<>()));
+        if(clazz.isAnnotationPresent(InjectOptions.class))
+        {
+            InjectOptions ops = clazz.getAnnotation(InjectOptions.class);
+            builder = findMethod(clazz, ops.builder(), true, clazz);
+            beforeBuild = findMethod(clazz, ops.beforeBuild(), false, Void.TYPE);
+            afterBuild = findMethod(clazz, ops.afterBuild(), false, Void.TYPE);
+        }
+        else
+        {
+            builder = null;
+            beforeBuild = null;
+            afterBuild = null;
+        }
     }
     
     private static LinkedList<PropertyCache> loadProperties(Class<?> clazz, LinkedList<PropertyCache> props)
@@ -61,6 +78,10 @@ public final class AutowiredCache
     
     final List<PropertyCache> getProperties() { return props; }
     
+    final Method getBuilder() { return builder; }
+    final Method getBeforeBuild() { return beforeBuild; }
+    final Method getAfterBuild() { return afterBuild; }
+    
     
     
     
@@ -85,12 +106,16 @@ public final class AutowiredCache
         final Field field;
         final String name;
         final AutowiredType type;
+        final Method set;
+        final Method get;
         
         private PropertyCache(Field field, Property property)
         {
             this.field = field;
             this.name = property.name().isEmpty() ? field.getName() : property.name();
             this.type = AutowiredType.decode(field);
+            this.set = findGSMethod(field, property.set(), true);
+            this.get = findGSMethod(field, property.get(), false);
             
             if(!field.isAccessible())
                 field.setAccessible(true);
@@ -100,6 +125,39 @@ public final class AutowiredCache
         public final String getName() { return name; }
         
         public final AutowiredType getType() { return type; }
+        
+        public final Method getGetMethod() { return get; }
+        public final Method getSetMethod() { return set; }
+    }
+    
+    private static Method findGSMethod(Field field, String name, boolean isSet)
+    {
+        Class<?> ret = isSet ? Void.TYPE : field.getType();
+        Class<?>[] args = isSet ? new Class[] { field.getType() } : new Class[] {};
+        return findMethod(field.getDeclaringClass(), name, false, ret, args);
+    }
+    
+    private static Method findMethod(Class<?> jclass, String name, boolean isStatic, Class<?> returnType, Class<?>... argTypes)
+    {
+        if(name == null || name.isEmpty())
+            return null;
+        try
+        {
+            Method m = jclass.getDeclaredMethod(name, argTypes);
+            if(m == null)
+                return null;
+            if(m.getReturnType() != returnType)
+                return null;
+            if(Modifier.isStatic(m.getModifiers()) != isStatic)
+                return null;
+            if(!m.isAccessible())
+                m.setAccessible(true);
+            return m;
+        }
+        catch(Throwable ex)
+        {
+            return null;
+        }
     }
     
     
