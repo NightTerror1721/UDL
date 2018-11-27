@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import kp.udl.autowired.Autowired;
+import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
 import kp.udl.exception.UDLException;
 import kp.udl.input.ElementPool;
@@ -120,15 +121,25 @@ public final class UDL
     
     
     
+    public static final UDLValue extract(Object object, SerializerManager smanager) throws UDLException
+    {
+        return Autowired.extract(object, smanager);
+    }
+    
     public static final UDLValue extract(Object object) throws UDLException
     {
-        return Autowired.extract(object);
+        return Autowired.extract(object, null);
     }
     
     
+    public static final <T> T inject(UDLValue value, Class<T> jclass, SerializerManager smanager)
+    {
+        return Autowired.inject(jclass, value, smanager);
+    }
+    
     public static final <T> T inject(UDLValue value, Class<T> jclass)
     {
-        return Autowired.inject(jclass, value);
+        return Autowired.inject(jclass, value, null);
     }
     
 }

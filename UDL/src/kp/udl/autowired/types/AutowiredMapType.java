@@ -7,6 +7,7 @@ package kp.udl.autowired.types;
 
 import java.util.HashMap;
 import java.util.Map;
+import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
 import static kp.udl.data.UDLValue.valueOf;
 
@@ -41,22 +42,22 @@ public final class AutowiredMapType extends AutowiredType
     }
 
     @Override
-    public final Object inject(UDLValue base)
+    public final Object inject(UDLValue base, SerializerManager smanager)
     {
         Map<UDLValue, UDLValue> baseMap = base.getMap();
         HashMap map = new HashMap<>(base.size());
         for(Map.Entry<UDLValue, UDLValue> e : baseMap.entrySet())
-            map.put(keyType.inject(e.getKey()), valuesType.inject(e.getValue()));
+            map.put(keyType.inject(e.getKey(), smanager), valuesType.inject(e.getValue(), smanager));
         return map;
     }
 
     @Override
-    public final UDLValue extract(Object base)
+    public final UDLValue extract(Object base, SerializerManager smanager)
     {
         Map<?, ?> baseMap = (Map) base;
         Map<UDLValue, UDLValue> map = new HashMap<>();
         for(Map.Entry e : baseMap.entrySet())
-            map.put(keyType.extract(e.getKey()), valuesType.extract(e.getValue()));
+            map.put(keyType.extract(e.getKey(), smanager), valuesType.extract(e.getValue(), smanager));
         return valueOf(map);
     }
 }

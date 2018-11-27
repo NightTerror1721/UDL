@@ -5,6 +5,7 @@
  */
 package kp.udl.autowired.types;
 
+import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
 import static kp.udl.data.UDLValue.valueOf;
 
@@ -51,7 +52,7 @@ final class AutowiredBaseType extends AutowiredType
     }
 
     @Override
-    public Object inject(UDLValue base)
+    public Object inject(UDLValue base, SerializerManager smanager)
     {
         switch(ptype)
         {
@@ -69,7 +70,7 @@ final class AutowiredBaseType extends AutowiredType
     }
 
     @Override
-    public final UDLValue extract(Object base)
+    public final UDLValue extract(Object base, SerializerManager smanager)
     {
         switch(ptype)
         {

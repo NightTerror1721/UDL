@@ -6,6 +6,7 @@
 package kp.udl.autowired.types;
 
 import java.lang.reflect.Array;
+import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
 import static kp.udl.data.UDLValue.valueOf;
 
@@ -31,14 +32,14 @@ public final class AutowiredEnumType extends AutowiredType
     }
 
     @Override
-    public final Object inject(UDLValue base)
+    public final Object inject(UDLValue base, SerializerManager smanager)
     {
         try { return Enum.valueOf(jclass, base.getString()); }
         catch(Throwable ex) { return null; }
     }
 
     @Override
-    public final UDLValue extract(Object base)
+    public final UDLValue extract(Object base, SerializerManager smanager)
     {
         Enum e = (Enum) base;
         return valueOf(e.name());

@@ -8,6 +8,7 @@ package kp.udl.autowired.types;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
 import static kp.udl.data.UDLValue.valueOf;
 
@@ -39,22 +40,22 @@ public final class AutowiredListType extends AutowiredType
     }
 
     @Override
-    public Object inject(UDLValue base)
+    public Object inject(UDLValue base, SerializerManager smanager)
     {
         List<UDLValue> baseList = base.getList();
         List list = linked ? new LinkedList<>() : new ArrayList<>(baseList.size());
         for(UDLValue value : baseList)
-            list.add(valuesType.inject(value));
+            list.add(valuesType.inject(value, smanager));
         return list;
     }
 
     @Override
-    public final UDLValue extract(Object base)
+    public final UDLValue extract(Object base, SerializerManager smanager)
     {
         List baseList = (List) base;
         List<UDLValue> list = new LinkedList<>();
         for(Object value : baseList)
-            list.add(valuesType.extract(value));
+            list.add(valuesType.extract(value, smanager));
         return valueOf(list);
     }
 }

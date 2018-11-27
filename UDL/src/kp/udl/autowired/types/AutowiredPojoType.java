@@ -7,6 +7,7 @@ package kp.udl.autowired.types;
 
 import java.lang.reflect.Array;
 import kp.udl.autowired.Autowired;
+import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
 
 /**
@@ -32,15 +33,15 @@ public final class AutowiredPojoType extends AutowiredType
     final Object arrayInstance(int len) { return Array.newInstance(jclass, len); }
 
     @Override
-    public final Object inject(UDLValue base)
+    public final Object inject(UDLValue base, SerializerManager smanager)
     {
-        return Autowired.inject(jclass, base);
+        return Autowired.inject(jclass, base, smanager);
     }
 
     @Override
-    public final UDLValue extract(Object base)
+    public final UDLValue extract(Object base, SerializerManager smanager)
     {
-        return Autowired.extract(base);
+        return Autowired.extract(base, smanager);
     }
     
     

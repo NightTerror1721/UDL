@@ -21,8 +21,10 @@ public final class Autowired
 {
     private Autowired() {}
     
-    public static final <T> T inject(Class<T> jclass, UDLValue source)
+    public static final <T> T inject(Class<T> jclass, UDLValue source, SerializerManager smanager)
     {
+        if(smanager != null && smanager.hasSerializer(jclass))
+            return smanager.inject(jclass, source);
         try
         {
             AutowiredCache cache = AutowiredCache.getCache(jclass);
@@ -33,7 +35,7 @@ public final class Autowired
                 UDLValue value = source.get(valueOf(prop.name));
                 if(value == null || value == UDLValue.NULL)
                     continue;
-                Object injectedObject = prop.type.inject(value);
+                Object injectedObject = prop.type.inject(value, smanager);
                 if(prop.set != null)
                     prop.set.invoke(obj, injectedObject);
                 else prop.field.set(obj, injectedObject);
@@ -51,8 +53,10 @@ public final class Autowired
         }
     }
     
-    public static final UDLValue extract(Object source)
+    public static final UDLValue extract(Object source, SerializerManager smanager)
     {
+        if(smanager != null && smanager.hasSerializer(source.getClass()))
+            return smanager.extract(source);
         try
         {
             AutowiredCache cache = AutowiredCache.getCache(source.getClass());
@@ -62,7 +66,7 @@ public final class Autowired
             {
                 Object fieldValue = prop.get != null ? prop.get.invoke(source) : prop.field.get(source);
                 UDLValue key = valueOf(prop.name);
-                UDLValue value = fieldValue == null ? NULL : prop.type.extract(fieldValue);
+                UDLValue value = fieldValue == null ? NULL : prop.type.extract(fieldValue, smanager);
                 obj.put(key, value);
             }
             

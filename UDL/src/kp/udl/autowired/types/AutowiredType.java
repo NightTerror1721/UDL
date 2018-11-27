@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import kp.udl.autowired.SerializerManager;
 import kp.udl.autowired.types.AutowiredBaseType.PType;
 import kp.udl.data.UDLValue;
 
@@ -41,9 +42,9 @@ public abstract class AutowiredType
     
     abstract Object arrayInstance(int len);
     
-    public abstract Object inject(UDLValue base);
+    public abstract Object inject(UDLValue base, SerializerManager smanager);
     
-    public abstract UDLValue extract(Object base);
+    public abstract UDLValue extract(Object base, SerializerManager smanager);
     
     
     
