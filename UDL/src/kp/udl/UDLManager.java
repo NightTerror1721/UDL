@@ -11,11 +11,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Objects;
 import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
 import kp.udl.exception.UDLException;
 import kp.udl.input.ElementPool;
+import kp.udl.input.cmd.UseCommand;
 
 /**
  *
@@ -25,6 +27,8 @@ public final class UDLManager
 {
     private final SerializerManager serials;
     private final ElementPool elems;
+    
+    private final HashMap<String, ElementPool> usables = new HashMap<>();
     
     public UDLManager(SerializerManager serializers, ElementPool elementPool)
     {
@@ -37,6 +41,17 @@ public final class UDLManager
     
     public final SerializerManager getSerializerManager() { return serials; }
     public final ElementPool getElementPool() { return elems; }
+    
+    public final void registerUsable(String name, ElementPool pool)
+    {
+        if(name == null)
+            throw new NullPointerException();
+        if(pool == null)
+            throw new NullPointerException();
+        usables.put(name, pool);
+    }
+    
+    public final void enableDefaultUseCommand() { elems.putCommand("use", new Use()); }
     
     
     /* Read ops */
@@ -54,4 +69,17 @@ public final class UDLManager
     /* Autowired ops */
     public final UDLValue extract(Object obj) { return serials.extract(obj); }
     public final <T> T inject(Class<T> jclass, UDLValue value) { return serials.inject(jclass, value); }
+    
+    
+    private final class Use extends UseCommand
+    {
+        @Override
+        protected final void applyUse(String useIdentifier, ElementPool pool)
+        {
+            ElementPool base = usables.getOrDefault(useIdentifier, null);
+            if(base == null)
+                return;
+            pool.putPool(base);
+        }
+    }
 }

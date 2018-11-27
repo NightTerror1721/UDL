@@ -6,6 +6,7 @@
 package kp.udl.input;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import kp.udl.data.UDLValue;
 import kp.udl.exception.UDLException;
@@ -61,6 +62,14 @@ public class ElementPool
     public final void putCommand(String name, Command command)
     {
         vars.put(name, Objects.requireNonNull(command));
+    }
+    
+    public final void putPool(ElementPool pool)
+    {
+        if(pool.parent != null)
+            putPool(pool.parent);
+        for(Map.Entry<String, Element> e : pool.vars.entrySet())
+            vars.put(e.getKey(), e.getValue());
     }
     
     
