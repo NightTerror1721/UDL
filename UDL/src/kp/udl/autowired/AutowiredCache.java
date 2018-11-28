@@ -113,7 +113,7 @@ public final class AutowiredCache
         {
             this.field = field;
             this.name = property.name().isEmpty() ? field.getName() : property.name();
-            this.type = AutowiredType.decode(field);
+            this.type = AutowiredType.decode(field, property);
             this.set = findGSMethod(field, property.set(), true);
             this.get = findGSMethod(field, property.get(), false);
             

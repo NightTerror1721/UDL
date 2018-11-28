@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import kp.udl.autowired.Property;
 import kp.udl.autowired.SerializerManager;
 import kp.udl.autowired.types.AutowiredBaseType.PType;
 import kp.udl.data.UDLValue;
@@ -48,19 +49,19 @@ public abstract class AutowiredType
     
     
     
-    private static AutowiredType decode(Type jtype)
+    private static AutowiredType decode(Type jtype, Property prop)
     {
         if(jtype instanceof Class<?>)
         {
             Class<?> jclass = (Class<?>) jtype;
             if(jclass.isEnum())
             {
-                return new AutowiredEnumType(jclass);
+                return new AutowiredEnumType(jclass, getInvalidEnumValue(jclass, prop), prop.enumById());
             }
             else if(jclass.isArray())
             {
                 Class<?> base = jclass.getComponentType();
-                return new AutowiredArrayType(decode(base));
+                return new AutowiredArrayType(decode(base, prop));
             }
             else if(SCALAR_CACHE.containsKey(jclass))
                 return SCALAR_CACHE.get(jclass);
@@ -72,22 +73,28 @@ public abstract class AutowiredType
             Type[] pars = ((ParameterizedType) jtype).getActualTypeArguments();
             Type raw = ptype.getRawType();
             if(raw == ArrayList.class || raw == List.class)
-                return new AutowiredListType(false, decode(pars[0]));
+                return new AutowiredListType(false, decode(pars[0], prop));
             if(raw == LinkedList.class)
-                return new AutowiredListType(true, decode(pars[0]));
+                return new AutowiredListType(true, decode(pars[0], prop));
             else if(raw == HashMap.class || raw == Map.class)
-                return new AutowiredMapType(decode(pars[0]), decode(pars[1]));
+                return new AutowiredMapType(decode(pars[0], prop), decode(pars[1], prop));
             return new AutowiredPojoType((Class<?>) ptype.getRawType());
         }
         throw new IllegalArgumentException("Invalid type to decode: " + jtype);
     }
     
-    public static final AutowiredType decode(Field field)
+    public static final AutowiredType decode(Field field, Property prop)
     {
         if(field.getType().getTypeParameters().length > 0)
-            return decode(field.getGenericType());
-        return decode(field.getType());
+            return decode(field.getGenericType(), prop);
+        return decode(field.getType(), prop);
     }   
+    
+    private static Enum getInvalidEnumValue(Class<?> jclass, Property prop)
+    {
+        try { return Enum.valueOf((Class<? extends Enum>) jclass, prop.invalidEnumValue()); }
+        catch(Throwable ex) { return null; }
+    }
     
     
     /* INSTANCES */

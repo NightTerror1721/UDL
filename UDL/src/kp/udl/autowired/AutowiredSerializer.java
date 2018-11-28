@@ -15,7 +15,7 @@ import kp.udl.data.UDLValue;
  */
 public abstract class AutowiredSerializer<T>
 {
-    private final Class<T> jclass;
+    protected final Class<T> jclass;
     
     public AutowiredSerializer(Class<T> jclass)
     {

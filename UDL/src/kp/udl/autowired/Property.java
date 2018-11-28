@@ -21,4 +21,7 @@ public @interface Property
     String name() default "";
     String set() default "";
     String get() default "";
+    
+    boolean enumById() default true;
+    String invalidEnumValue() default "";
 }

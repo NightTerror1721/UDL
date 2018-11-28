@@ -17,12 +17,18 @@ import static kp.udl.data.UDLValue.valueOf;
 public final class AutowiredEnumType extends AutowiredType
 {
     private final Class<? extends Enum> jclass;
+    private final Object[] values;
+    private final Object invalid;
+    private final boolean byId;
     
-    public AutowiredEnumType(Class<?> jclass)
+    public AutowiredEnumType(Class<?> jclass, Object invalidValue, boolean byId)
     {
         if(!jclass.isEnum())
             throw new IllegalStateException();
         this.jclass = (Class<? extends Enum>) jclass;
+        this.values = jclass.getEnumConstants();
+        this.invalid = invalidValue;
+        this.byId = byId;
     }
 
     @Override
@@ -34,14 +40,22 @@ public final class AutowiredEnumType extends AutowiredType
     @Override
     public final Object inject(UDLValue base, SerializerManager smanager)
     {
-        try { return Enum.valueOf(jclass, base.getString()); }
-        catch(Throwable ex) { return null; }
+        try
+        {
+            if(byId)
+            {
+                int id = base.getInt();
+                return id < 0 || id >= values.length ? invalid : values[id];
+            }
+            return Enum.valueOf(jclass, base.getString());
+        }
+        catch(Throwable ex) { return invalid; }
     }
 
     @Override
     public final UDLValue extract(Object base, SerializerManager smanager)
     {
-        Enum e = (Enum) base;
-        return valueOf(e.name());
+        Enum e = (Enum) (base == null ? invalid : base);
+        return byId ? valueOf(e.ordinal()) : valueOf(e.name());
     }
 }
