@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Objects;
 import kp.udl.autowired.SerializerManager;
@@ -58,12 +59,14 @@ public final class UDLManager
     public final UDLValue read(Reader reader) throws UDLException, IOException { return UDL.read(reader, elems); }
     public final UDLValue read(InputStream is) throws UDLException, IOException { return UDL.read(is, elems); }
     public final UDLValue read(File file) throws UDLException, IOException { return UDL.read(file, elems); }
+    public final UDLValue read(Path file) throws UDLException, IOException { return UDL.read(file, elems); }
     public final UDLValue decode(String text) throws UDLException, IOException { return UDL.decode(text, elems); }
     
     /* Write ops */
     public final void write(Writer writer, UDLValue value) throws UDLException, IOException { UDL.write(value, writer); }
     public final void write(OutputStream os, UDLValue value) throws UDLException, IOException { UDL.write(value, os); }
     public final void write(File file, UDLValue value) throws UDLException, IOException { UDL.write(value, file); }
+    public final void write(Path file, UDLValue value) throws UDLException, IOException { UDL.write(value, file); }
     public final String encode(UDLValue value, boolean wrapped) throws UDLException, IOException { return UDL.encode(value, wrapped); }
     
     /* Autowired ops */

@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import kp.udl.autowired.Autowired;
 import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
@@ -70,6 +72,21 @@ public final class UDL
         }
     }
     
+    public static final UDLValue read(Path file, ElementPool parentPool) throws IOException, UDLException
+    {
+        try(InputStream is = Files.newInputStream(file))
+        {
+            return read(is, parentPool);
+        }
+    }
+    public static final UDLValue read(Path file) throws IOException, UDLException
+    {
+        try(InputStream is = Files.newInputStream(file))
+        {
+            return read(is);
+        }
+    }
+    
     public static final UDLValue decode(String text, ElementPool parentPool) throws IOException, UDLException
     {
         try(ByteArrayInputStream bais = new ByteArrayInputStream(text.getBytes()))
@@ -109,6 +126,15 @@ public final class UDL
         }
     }
     public static final void write(UDLValue value, File file) throws IOException, UDLException { write(value, file, false); }
+    
+    public static final void write(UDLValue value, Path file, boolean wrapped) throws IOException, UDLException
+    {
+        try(OutputStream os = Files.newOutputStream(file))
+        {
+            write(value, os, wrapped);
+        }
+    }
+    public static final void write(UDLValue value, Path file) throws IOException, UDLException { write(value, file, false); }
     
     public static final String encode(UDLValue value, boolean wrapped) throws IOException, UDLException
     {
