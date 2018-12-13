@@ -110,6 +110,7 @@ public final class AutowiredCache
         final Method set;
         final Method get;
         final Method injector;
+        final Method extractor;
         
         private PropertyCache(Field field, Property property)
         {
@@ -119,6 +120,7 @@ public final class AutowiredCache
             this.set = findGSMethod(field, property.set(), true);
             this.get = findGSMethod(field, property.get(), false);
             this.injector = findInjectorMethod(field, property.customInjector());
+            this.extractor = findExtractorMethod(field, property.customExtractor());
             
             if(!field.isAccessible())
                 field.setAccessible(true);
@@ -144,6 +146,13 @@ public final class AutowiredCache
     {
         Class<?> ret = field.getType();
         Class<?>[] args = new Class[] { UDLValue.class };
+        return findMethod(field.getDeclaringClass(), name, false, ret, args);
+    }
+    
+    private static Method findExtractorMethod(Field field, String name)
+    {
+        Class<?> ret = UDLValue.class;
+        Class<?>[] args = new Class[] { field.getType() };
         return findMethod(field.getDeclaringClass(), name, false, ret, args);
     }
     

@@ -26,4 +26,5 @@ public @interface Property
     String invalidEnumValue() default "";
     
     String customInjector() default "";
+    String customExtractor() default "";
 }

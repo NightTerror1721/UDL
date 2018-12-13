@@ -66,7 +66,7 @@ public final class Autowired
             {
                 Object fieldValue = prop.get != null ? prop.get.invoke(source) : prop.field.get(source);
                 UDLValue key = valueOf(prop.name);
-                UDLValue value = fieldValue == null ? NULL : prop.type.extract(fieldValue, smanager);
+                UDLValue value = fieldValue == null ? NULL : extractProperty(prop, smanager, source, fieldValue);
                 obj.put(key, value);
             }
             
@@ -104,5 +104,16 @@ public final class Autowired
         if(injectedObject == null)
             injectedObject = prop.type.inject(value, smanager);
         return injectedObject;
+    }
+    
+    private static UDLValue extractProperty(PropertyCache prop, SerializerManager smanager, Object obj, Object fieldValue) throws Throwable
+    {
+        UDLValue value = null;
+        if(prop.extractor != null)
+            value = (UDLValue) prop.extractor.invoke(obj, fieldValue);
+        
+        if(value == null)
+            value = prop.type.extract(fieldValue, smanager);
+        return value;
     }
 }
