@@ -35,7 +35,7 @@ public final class Autowired
                 UDLValue value = source.get(valueOf(prop.name));
                 if(value == null || value == UDLValue.NULL)
                     continue;
-                Object injectedObject = prop.type.inject(value, smanager);
+                Object injectedObject = injectProperty(prop, smanager, obj, value);
                 if(prop.set != null)
                     prop.set.invoke(obj, injectedObject);
                 else prop.field.set(obj, injectedObject);
@@ -93,5 +93,16 @@ public final class Autowired
             before.invoke(obj);
         
         return obj;
+    }
+    
+    private static Object injectProperty(PropertyCache prop, SerializerManager smanager, Object obj, UDLValue value) throws Throwable
+    {
+        Object injectedObject = null;
+        if(prop.injector != null)
+            injectedObject = prop.injector.invoke(obj, value);
+        
+        if(injectedObject == null)
+            injectedObject = prop.type.inject(value, smanager);
+        return injectedObject;
     }
 }

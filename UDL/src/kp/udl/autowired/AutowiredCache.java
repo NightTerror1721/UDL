@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import kp.udl.autowired.AutowiredCache.PropertyCache;
 import kp.udl.autowired.types.AutowiredType;
+import kp.udl.data.UDLValue;
 
 /**
  *
@@ -108,6 +109,7 @@ public final class AutowiredCache
         final AutowiredType type;
         final Method set;
         final Method get;
+        final Method injector;
         
         private PropertyCache(Field field, Property property)
         {
@@ -116,6 +118,7 @@ public final class AutowiredCache
             this.type = AutowiredType.decode(field, property);
             this.set = findGSMethod(field, property.set(), true);
             this.get = findGSMethod(field, property.get(), false);
+            this.injector = findInjectorMethod(field, property.customInjector());
             
             if(!field.isAccessible())
                 field.setAccessible(true);
@@ -134,6 +137,13 @@ public final class AutowiredCache
     {
         Class<?> ret = isSet ? Void.TYPE : field.getType();
         Class<?>[] args = isSet ? new Class[] { field.getType() } : new Class[] {};
+        return findMethod(field.getDeclaringClass(), name, false, ret, args);
+    }
+    
+    private static Method findInjectorMethod(Field field, String name)
+    {
+        Class<?> ret = field.getType();
+        Class<?>[] args = new Class[] { UDLValue.class };
         return findMethod(field.getDeclaringClass(), name, false, ret, args);
     }
     

@@ -24,4 +24,6 @@ public @interface Property
     
     boolean enumById() default true;
     String invalidEnumValue() default "";
+    
+    String customInjector() default "";
 }
