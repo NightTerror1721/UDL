@@ -35,13 +35,13 @@ public final class AutowiredPojoType extends AutowiredType
     @Override
     public final Object inject(UDLValue base, SerializerManager smanager)
     {
-        return Autowired.inject(jclass, base, smanager);
+        return Autowired.inject(jclass, base, smanager, false);
     }
 
     @Override
     public final UDLValue extract(Object base, SerializerManager smanager)
     {
-        return Autowired.extract(base, smanager);
+        return Autowired.extract(base, smanager, false);
     }
     
     

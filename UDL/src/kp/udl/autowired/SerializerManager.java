@@ -33,7 +33,7 @@ public final class SerializerManager
         AutowiredSerializer serializer = serializers.getOrDefault(obj.getClass(), null);
         if(serializer != null)
             return serializer.serialize(obj);
-        return Autowired.extract(obj, this);
+        return Autowired.extract(obj, this, false);
     }
     
     public final <T> T inject(Class<T> jclass, UDLValue value)
@@ -41,6 +41,6 @@ public final class SerializerManager
         AutowiredSerializer<?> serializer = serializers.getOrDefault(jclass, null);
         if(serializer != null)
             return (T) serializer.unserialize(value);
-        return Autowired.inject(jclass, value, this);
+        return Autowired.inject(jclass, value, this, false);
     }
 }

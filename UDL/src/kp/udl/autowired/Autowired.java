@@ -21,9 +21,9 @@ public final class Autowired
 {
     private Autowired() {}
     
-    public static final <T> T inject(Class<T> jclass, UDLValue source, SerializerManager smanager)
+    public static final <T> T inject(Class<T> jclass, UDLValue source, SerializerManager smanager, boolean ignoreManager)
     {
-        if(smanager != null && smanager.hasSerializer(jclass))
+        if(!ignoreManager && smanager != null && smanager.hasSerializer(jclass))
             return smanager.inject(jclass, source);
         try
         {
@@ -53,9 +53,9 @@ public final class Autowired
         }
     }
     
-    public static final UDLValue extract(Object source, SerializerManager smanager)
+    public static final UDLValue extract(Object source, SerializerManager smanager, boolean ignoreManager)
     {
-        if(smanager != null && smanager.hasSerializer(source.getClass()))
+        if(!ignoreManager && smanager != null && smanager.hasSerializer(source.getClass()))
             return smanager.extract(source);
         try
         {
