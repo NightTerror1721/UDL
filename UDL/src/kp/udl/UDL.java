@@ -149,23 +149,23 @@ public final class UDL
     
     public static final UDLValue extract(Object object, SerializerManager smanager) throws UDLException
     {
-        return Autowired.extract(object, smanager);
+        return Autowired.extract(object, smanager, false);
     }
     
     public static final UDLValue extract(Object object) throws UDLException
     {
-        return Autowired.extract(object, null);
+        return Autowired.extract(object, null, false);
     }
     
     
     public static final <T> T inject(UDLValue value, Class<T> jclass, SerializerManager smanager)
     {
-        return Autowired.inject(jclass, value, smanager);
+        return Autowired.inject(jclass, value, smanager, false);
     }
     
     public static final <T> T inject(UDLValue value, Class<T> jclass)
     {
-        return Autowired.inject(jclass, value, null);
+        return Autowired.inject(jclass, value, null, false);
     }
     
 }

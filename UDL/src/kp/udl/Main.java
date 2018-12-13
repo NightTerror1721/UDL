@@ -45,7 +45,7 @@ public final class Main
         a.setElems(new HashMap<>());
         a.setTextList(Arrays.asList("ola", "k", "ase"));
         
-        UDLValue autoValue = Autowired.extract(a, null);
+        UDLValue autoValue = Autowired.extract(a, null, false);
         System.out.println(autoValue);
         
         UDL.write(value, new File("output.udl"));
