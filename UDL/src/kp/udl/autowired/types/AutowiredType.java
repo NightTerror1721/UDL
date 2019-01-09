@@ -10,9 +10,12 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import kp.udl.autowired.Property;
 import kp.udl.autowired.SerializerManager;
 import kp.udl.autowired.types.AutowiredBaseType.PType;
@@ -38,6 +41,7 @@ public abstract class AutowiredType
     public boolean isEnum() { return false; }
     public boolean isArray() { return false; }
     public boolean isList() { return false; }
+    public boolean isSet() { return false; }
     public boolean isMap() { return false; }
     public boolean isPojo() { return false; }
     
@@ -76,7 +80,11 @@ public abstract class AutowiredType
                 return new AutowiredListType(false, decode(pars[0], prop));
             if(raw == LinkedList.class)
                 return new AutowiredListType(true, decode(pars[0], prop));
-            else if(raw == HashMap.class || raw == Map.class)
+            if(raw == HashSet.class || raw == Set.class)
+                return new AutowiredSetType(false, decode(pars[0], prop));
+            if(raw == LinkedHashSet.class)
+                return new AutowiredSetType(true, decode(pars[0], prop));
+            if(raw == HashMap.class || raw == Map.class)
                 return new AutowiredMapType(decode(pars[0], prop), decode(pars[1], prop));
             return new AutowiredPojoType((Class<?>) ptype.getRawType());
         }
