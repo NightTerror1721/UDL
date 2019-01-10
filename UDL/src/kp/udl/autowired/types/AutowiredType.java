@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,7 +86,9 @@ public abstract class AutowiredType
             if(raw == LinkedHashSet.class)
                 return new AutowiredSetType(true, decode(pars[0], prop));
             if(raw == HashMap.class || raw == Map.class)
-                return new AutowiredMapType(decode(pars[0], prop), decode(pars[1], prop));
+                return new AutowiredMapType(false, decode(pars[0], prop), decode(pars[1], prop));
+            if(raw == LinkedHashMap.class)
+                return new AutowiredMapType(true, decode(pars[0], prop), decode(pars[1], prop));
             return new AutowiredPojoType((Class<?>) ptype.getRawType());
         }
         throw new IllegalArgumentException("Invalid type to decode: " + jtype);

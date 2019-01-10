@@ -6,6 +6,7 @@
 package kp.udl.autowired.types;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import kp.udl.autowired.SerializerManager;
 import kp.udl.data.UDLValue;
@@ -17,11 +18,13 @@ import static kp.udl.data.UDLValue.valueOf;
  */
 public final class AutowiredMapType extends AutowiredType
 {
+    private final boolean linked;
     private final AutowiredType keyType;
     private final AutowiredType valuesType;
     
-    public AutowiredMapType(AutowiredType keyType, AutowiredType valuesType)
+    public AutowiredMapType(boolean linked, AutowiredType keyType, AutowiredType valuesType)
     {
+        this.linked = linked;
         this.keyType = keyType;
         this.valuesType = valuesType;
     }
@@ -45,7 +48,7 @@ public final class AutowiredMapType extends AutowiredType
     public final Object inject(UDLValue base, SerializerManager smanager)
     {
         Map<UDLValue, UDLValue> baseMap = base.getMap();
-        HashMap map = new HashMap<>(base.size());
+        HashMap map = linked ? new LinkedHashMap<>(base.size()) : new HashMap<>(base.size());
         for(Map.Entry<UDLValue, UDLValue> e : baseMap.entrySet())
             map.put(keyType.inject(e.getKey(), smanager), valuesType.inject(e.getValue(), smanager));
         return map;
